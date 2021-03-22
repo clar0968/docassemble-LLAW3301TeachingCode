@@ -35,10 +35,18 @@ buttons:
 event: endpoints['final_screen']
 question: Breach of Contract App
 subquestion: |
-  % if MJFcontract_exists:
-  ${ MJFcontract_exists_template }
+  % if MJFsue_reason == 'MJFpromisee':
+    % if MJFcontract_exists:
+    ${ MJFcontract_exists_template }
+    % else:
+    ${ MJFnot_contract_exists_template }
+    % endif
   % else:
-  ${ MJFnot_contract_exists_template }
+    % if Lcontract_exists:
+    ${ MJFcontract_exists_template }
+    % else:
+    ${ MJFnot_contract_exists_template }
+    % endif
   % endif
 buttons:
   - Restart: restart
@@ -92,18 +100,31 @@ content: |
   You should still seek legal advice for a formal legal opinion.
 
   Based on your responses:
-  
-  % if MJFcertainty != 'MJFagree_exact':
-  - You and the other person did not agree to do this work, or all of this work,
-    or there was other work done that was not agreed to.
-  % endif
-  % if not MJFconsideration:
-  - You never reached a firm agreement on how much to pay for the work done.
-  % endif
-  % if not MJFcapacity:
-  - The other person was under 18.  It is possible in some circumstances to enter into
-    a contract with people under 18.  You should seek legal advice about whether your
-    situation meets these circumstances.
+  % if MJFsue_reason == 'MJFpromisee':
+    % if MJFcertainty != 'MJFagree_exact':
+    - You and the other person did not agree to do this work, or all of this work,
+      or there was other work done that was not agreed to.
+    % endif
+    % if not MJFconsideration:
+    - You never reached a firm agreement on how much to pay for the work done.
+    % endif
+    % if not MJFcapacity:
+    - The other person was under 18.  It is possible in some circumstances to enter into
+      a contract with people under 18.  You should seek legal advice about whether your
+      situation meets these circumstances.
+    % endif
+  % else:
+    % if Lcertainty != 'Lagree_exact':
+    - You and the other person did not agree to do this work, or all of this work, or there was other work done that was not agreed to
+    % endif
+    % if not Lconsideration:
+    - You never reached a firm agreement on how much you would be paid for the work.
+    % endif
+    % if not Lcapacity:
+    - You are under the age of 18.  It is possible in some circumstances to enter into
+      a contract when you are under 18.  You should seek legal advice about whether your
+      situation meets these circumstances.
+    % endif
   % endif
 
 
